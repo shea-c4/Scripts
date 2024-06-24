@@ -1,0 +1,1 @@
+powershell -File "%~dp0split4x.ps1" -inFile %*
