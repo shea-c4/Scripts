@@ -14,7 +14,7 @@ doskey /MACROFILE="%scriptDir%\doskey_macros.txt"
 REM doskey /macros
 
 ENDLOCAL
-SET promptCmd=PROMPT ^[%COMPUTERNAME%^] $D$T $P$+$G
+SET promptCmd=PROMPT ^[%COMPUTERNAME%^] $D $T $P$+$G
 ECHO ^[%scriptName%^]: Executing %promptCmd%
 %promptCmd%
 
