@@ -16,7 +16,7 @@ SET VIDFQ=%VIDDIR%%~nx1
 
 IF "%MODSIZE%" EQU "" SET MODSIZE=tiny
 
-SET VCMD1=CALL speech2text.bat "%VIDFQ%" %MODSIZE%
+SET VCMD1=CALL s2en.bat "%VIDFQ%" %MODSIZE%
 @ECHO %~0: Executing %VCMD1%
 %VCMD1%
 
