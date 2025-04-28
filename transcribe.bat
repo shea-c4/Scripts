@@ -1,28 +1,26 @@
 @echo off
-
 setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
-IF "%~1" EQU "" goto usage
+SET scriptName=%~nx0
+
+IF "%~1" EQU "" (
+    call :usage
+    exit /b 1
+)
 
 SET input=%~1
+SET inputNameOnly=%~n1
 SET model=turbo
-IF "%~2" NEQ "" SET model=%2
+IF "%2" NEQ "" SET model=%2
 
-SET outputDir=speech2text\%~n1\%model%
-IF "%~3" NEQ "" SET outputDir=%~3\%~n1\%model%
+SET srtDir=%CD%\speech2text\%inputNameOnly%\%model%
 
-SET execCmd=whisper.bat --language en --task transcribe --model %model% --fp16 False --output_format all --output_dir "%outputDir%" "%input%"
-echo executing %execCmd%
-%execCmd%
+SET whisperCmd=whisper.bat --model %model% --output_dir "%srtDir%" "%input%" %3 %4 %5 %6 %7 %8 %9
+echo executing %whisperCmd%
+%whisperCmd%
 
-endlocal
-goto :EOF
+exit /b %ERRORLEVEL%
 
 :usage
-echo usage: %0 input [model] [outputDir]
-echo input is required
-echo model is one of tiny,base,small,medium,large,turbo. default is turbo.
-echo outpuDir defaults to speech2text
-echo output will be placed in outputDir\input-without-extension\model
-echo NOTE: to specify outputDir you must specify model
-echo ----------------------------------------------------------------
+call %scriptsDir%\transcribe-usage.bat %~nx0 %CD%
+exit /b 1

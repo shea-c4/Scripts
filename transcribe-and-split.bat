@@ -1,33 +1,34 @@
 @ECHO off
-SETLOCAL ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
+setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
-SET VID=%~1
-SET MODSIZE=%2
-SET SPLITMAX=%3
+SET scriptName=%~nx0
 
-IF "%VID%" EQU "" (
-   @ECHO usage: %~n0 input.mp4 [tiny^|base^|small^|medium^|large] [split-max]
+IF "%~1" EQU "" (
+   call :usage
    exit /b 1
 )
 
-SET VIDNOEXT=%~n1
-SET VIDDIR=%~dp1
-SET VIDFQ=%VIDDIR%%~nx1
+SET input=%~1
+SET inputNameOnly=%~n1
+SET model=turbo
+IF "%~2" NEQ "" SET model=%2
+SET splitMax=235
+if "%3" NEQ "" set splitMax=%3
 
-IF "%MODSIZE%" EQU "" SET MODSIZE=tiny
+REM call %scriptsDir%\transcribe-and-subtitle.bat "%input%" %model% %4 %5 %6 %7 %8 %9
+call %scriptsDir%\transcribe.bat "%input%" %model% %4 %5 %6 %7 %8 %9
 
-SET VCMD1=CALL s2en.bat "%VIDFQ%" %MODSIZE%
-@ECHO %~0: Executing %VCMD1%
-%VCMD1%
+SET srtDir=%CD%\speech2text\%~n1\%model%
 
-SET SRTPREFIX=%VIDDIR%speech2text\%VIDNOEXT%\%MODSIZE%\%VIDNOEXT%
+SET splitCmd=CALL split4x.bat "%srtDir%\%inputNameOnly%.txt" %splitMax%
+ECHO %scriptName%: Executing %splitCmd%
+%splitCmd%
 
-SET SRT=%SRTPREFIX%.srt
-SET VCMD2=CALL ffsrt.bat "%VIDFQ%" "%SRT%"
-@ECHO %~0: Executing %VCMD2%
-%VCMD2%
+exit /b %ERRORLEVEL%
 
-SET TXT=%SRTPREFIX%.txt
-SET VCMD3=CALL split4x.bat "%TXT%" %SPLITMAX%
-@ECHO %~0: Executing %VCMD3%
-%VCMD3%
+:usage
+call %scriptsDir%\transcribe-usage.bat %scriptName% %CD%
+@REM ECHO  **NOTE** %scriptName% REQUIRES an additional argument, split-max, 
+@REM ECHO   BEFORE whisper passthrough args. split-max is the number of characters
+@REM ECHO   to split the transcription into before ECHOing to console
+exit /b 1

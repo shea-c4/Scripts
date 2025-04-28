@@ -9,7 +9,8 @@ SET s2tModel=tiny
 IF "%~2" NEQ "" SET s2tModel=%2
 SET s2tOutputDir=speech2text\%~n1\%s2tModel%
 IF "%~3" NEQ "" SET s2tOutputDir=%~3\%~n1\%s2tModel%
-SET s2tCmd=whisper.exe --model %s2tModel% --model_dir "%OneDriveConsumer%\Videos\whisper_models" --language en --fp16 False --output_dir "%s2tOutputDir%" "%s2tInput%" %4 %5 %6 %7 %8 %9
+REM SET s2tCmd=whisper.exe --model %s2tModel% --model_dir "%OneDriveConsumer%\Videos\whisper_models" --language en --fp16 False --output_dir "%s2tOutputDir%" "%s2tInput%" %4 %5 %6 %7 %8 %9
+SET s2tCmd=whisper.bat "%s2tOutputDir%" "%s2tInput%" %4 %5 %6 %7 %8 %9
 echo executing %s2tCmd%
 %s2tCmd%
 

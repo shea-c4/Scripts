@@ -1,3 +1,4 @@
+@echo off
 REM aliases created by winget install Microsoft.Sysinternals --interactive
 REM note: they take effect in the next terminal started after installation
 echo "ADExplorer"

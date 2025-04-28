@@ -17,7 +17,7 @@ SET VIDNOEXT=%~n1
 SET VIDDIR=%~dp1
 SET VIDFQ=%VIDDIR%%~nx1
 
-IF "%MODSIZE%" EQU "" SET MODSIZE=tiny
+IF "%MODSIZE%" EQU "" SET MODSIZE=turbo
 
 SET VCMD1=CALL speech2text.bat "%VIDFQ%" %MODSIZE%
 @ECHO %~0: Executing %VCMD1%
@@ -26,7 +26,7 @@ SET VCMD1=CALL speech2text.bat "%VIDFQ%" %MODSIZE%
 SET SRTPREFIX=%VIDDIR%speech2text\%VIDNOEXT%\%MODSIZE%\%VIDNOEXT%
 
 SET SRT=%SRTPREFIX%.srt
-SET VCMD2=CALL ffsrt.bat "%VIDFQ%" "%SRT%"
+SET VCMD2=CALL subtitle.bat "%VIDFQ%" "%SRT%"
 @ECHO %~0: Executing %VCMD2%
 %VCMD2%
 
