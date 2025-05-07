@@ -65,7 +65,7 @@ function Search-RegistryForValue {
         [string]$MatchText
     )
 
-    Write-Verbose "Checking subkey $Path for $MatchText"
+    Write-Verbose "Checking subkey $Path"
     try {
         $key = Get-Item -Path $Path -ErrorAction Stop
         $values = $key.GetValueNames()
