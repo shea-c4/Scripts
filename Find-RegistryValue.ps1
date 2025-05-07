@@ -34,6 +34,8 @@ param (
     [string]$MatchText
 )
 Write-Output "Script Starting"
+$DebugPreference = 'Continue'
+
 Write-Information "Script invoked with parameters:"
 Write-Information " Path=$Path"
 Write-Information " MatchText=$MatchText"
