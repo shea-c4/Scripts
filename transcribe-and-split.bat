@@ -16,9 +16,10 @@ SET splitMax=235
 if "%3" NEQ "" set splitMax=%3
 
 REM call %scriptsDir%\transcribe-and-subtitle.bat "%input%" %model% %4 %5 %6 %7 %8 %9
-call %scriptsDir%\transcribe.bat "%input%" %model% %4 %5 %6 %7 %8 %9
+set scriptsDir=%OneDriveConsumer%\scripts
+call "%scriptsDir%\transcribe.bat" "%input%" %model% %4 %5 %6 %7 %8 %9
 
-SET srtDir=%CD%\speech2text\%~n1\%model%
+SET srtDir=%OneDriveConsumer%\documents\whisper_transcripts\%~n1\%model%
 
 SET splitCmd=CALL split4x.bat "%srtDir%\%inputNameOnly%.txt" %splitMax%
 ECHO %scriptName%: Executing %splitCmd%

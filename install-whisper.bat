@@ -1,54 +1,77 @@
 @echo off
-@REM setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
-REM 8/18/2024 whisper.exe requires "(Latest) tools build x64/x86 C++ 2022 VS - v143MSVC"
-REM which can be installed via the visual studio installer
-REM the following doesn't work but interactively installing it seems to
-REM call :runcmd choco install visualstudio2022buildtools
+setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
-REM  install choco first
-call :runcmd winget install --id Chocolatey.Chocolatey --scope machine
-set PATH=C:\ProgramData\chocolatey\bin;%PATH%
+echo Installing Whisper and dependencies
+call :runcmd winget install miniconda3
 
-call :runcmd winget install --id Python.Python.3.9 --location c:\python39
-REM set PATH=C:\python39\Scripts\;C:\python39\;%PATH%
-REM choco includes refreshenv
-call refreshenv
+echo Restart with conda.exe in your path
+echo.
+echo Then run the following at least once from an administrative powershell prompt:
+echo conda init powershell 
+echo.
+echo The rest can be run from a regular administrative command prompt:
+echo %WINDIR%\System32\cmd.exe "/K %USERPROFILE%\miniconda3\Scripts\activate.bat C:\Users\maritime6626\miniconda3"
+echo pip3 install torch torchaudio torchvision --index-url https://download.pytorch.org/whl/cu126
+echo pip3 install openai-whisper
+echo pip3 install install deepmultilingualpunctuation
+echo python
+echo  from deepmultilingualpunctuation import PunctuationModel
+echo  PunctuationModel()  # triggers download
 
-REM if pip isn't already installed
-rem python -m ensurepip
-call :runcmd python -m pip install --upgrade pip
-call refreshenv
 
-REM ffmpeg-full didn't seem to work for whisper...
-call :runcmd choco install -y ffmpeg
-call refreshenv
+@REM REM  install choco first
+@REM echo checking for choco.exe
+@REM set haspath=0
+@REM call :checkpath choco.exe
+@REM if "!haspath!" equ "0" (
+@REM   echo installing chocolatey and updating path
+@REM   call :runcmd winget install --id Chocolatey.Chocolatey --scope machine
+@REM   set PATH=C:\ProgramData\chocolatey\bin;"%PATH%"
+@REM ) else (
+@REM   echo choco.exe found
+@REM )
 
-call :runcmd pip3 install torch --index-url https://download.pytorch.org/whl/cu126 --no-cache-dir --force
-call :runcmd pip3 install torchaudio --index-url https://download.pytorch.org/whl/cu126 --no-cache-dir --force
+@REM exit /b 0
 
-call :runcmd python -m pip install numpy==1.26.4 openai-whisper --no-input --no-cache-dir --force
-call refreshenv
+@REM REM call :runcmd winget install --id Python.Python.3.9 --location c:\python39
+@REM REM set PATH=C:\python39\Scripts\;C:\python39\;%PATH%
+@REM REM choco includes refreshenv
+@REM REM call refreshenv
+@REM rem call :runcmd choco install pyenv-win -y
+@REM rem call refreshenv
+@REM rem call pyenv install 3.9.13
+@REM rem call pyenv global 3.9.13
 
-@REM echo DONT FORGET TO UPDATE PATH
-@REM echo %PATH%
+@REM call :runcmd winget install --id Python.Python.3.10 --location c:\python310
+@REM set PATH=C:\python310\Scripts\;C:\python310\;%PATH%
 
-exit /b 0
+@REM REM if pip isn't already installed
+@REM rem python -m ensurepip
+@REM call python -m pip install --upgrade pip
+@REM REM call refreshenv
+
+@REM REM ffmpeg-full didn't seem to work for whisper...
+@REM call choco install -y ffmpeg
+@REM @REM call refreshenv
+
+@REM call pip3 install torch torchaudio torchvision --index-url https://download.pytorch.org/whl/cu126
+@REM @REM call pip3 install torchaudio --index-url https://download.pytorch.org/whl/cu126 --no-cache-dir --force
+
+@REM REM call python -m pip install numpy==1.26.4 openai-whisper --no-input
+@REM call pip3 install openai-whisper --no-input
+@REM call refreshenv
+
+@REM @REM echo DONT FORGET TO UPDATE PATH
+@REM @REM echo %PATH%
+
+@REM exit /b 0
 
 :runcmd
 echo Executing %*
 %*
+exit /b %ERRORLEVEL%
 
-
-
-@REM if "%ERRORLEVEL%" NEQ "0" (
-@REM    echo ERROR: ERRORLEVEL=%ERRORLEVEL% executing %*
-@REM    exit %ERRORLEVEL%
-@REM )
-goto :eof
-
-@REM :findtarget is not currently used. idea was to detect if file.exe in PATH
-:findtarget
-echo findtarget %1
-set findtarget=%~dp$PATH:1
-echo set findtarget=%findtarget%
-goto :eof
+:checkpath
+set haspath=0
+if "%~$PATH:1" NEQ "" set haspath=1
+exit /b 0

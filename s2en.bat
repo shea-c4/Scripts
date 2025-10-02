@@ -10,7 +10,7 @@ SET s2tInput=%~2
 SET s2tModel=tiny
 IF "%~3" NEQ "" SET s2tModel=%3
 
-SET s2tOutputDir=speech2text\%~n2\%s2tModel%
+SET s2tOutputDir=%OneDriveConsumer%\documents\whisper_transcripts\%~n2\%s2tModel%
 IF "%~4" NEQ "" SET s2tOutputDir=%~4\%~n2\%s2tModel%
 
 SET s2tCmd=whisper.bat --language %s2tLang% --task translate --model %s2tModel% --output_dir "%s2tOutputDir%" "%s2tInput%"

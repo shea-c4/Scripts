@@ -17,14 +17,19 @@ ENDLOCAL
 
 SET promptName=%USERNAME%
 if "%USERDOMAIN%" NEQ "%COMPUTERNAME%" SET promptName=%USERNAME%@%USERDOMAIN%
-SET promptCmd=PROMPT ^[%promptName% on %COMPUTERNAME%^] $D$T $P$+$G
+SET promptCmd=PROMPT ^[%promptName% on %COMPUTERNAME%^] $D $T $P$+$G
 ECHO ^[%scriptName%^]: Executing %promptCmd%
 %promptCmd%
 
 SET scriptsDir=%~dp0
 ECHO ^[%scriptName%^]: Exported scriptsDir=%scriptsDir% to environment
 
-echo .
+call %scriptsDir%\initconda.bat
+
+SET QT_SCALE_FACTOR=1.25
+echo ^[%scriptName%^]: set QT_SCALE_FACTOR to %QT_SCALE_FACTOR%
+
+echo.
 @REM echo .
 
 @REM call :updatepath "%ProgramFiles%\Notepad++"
